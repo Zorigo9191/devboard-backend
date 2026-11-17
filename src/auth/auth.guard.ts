@@ -11,7 +11,6 @@ export class AuthGuard implements CanActivate {
   private supabase: SupabaseClient;
 
   constructor() {
-    console.log('Guard: SUPABASE_URL =', process.env.SUPABASE_URL);
     this.supabase = createClient(
       process.env.SUPABASE_URL!,
       process.env.SUPABASE_SERVICE_KEY!,
@@ -21,9 +20,6 @@ export class AuthGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const authHeader: string | undefined = request.headers.authorization;
-
-    console.log('Guard: Anfrage', request.method, request.url);
-    console.log('Guard: Header =', authHeader?.slice(0, 20));
 
     const token = authHeader?.startsWith('Bearer ')
       ? authHeader.slice(7)
@@ -41,6 +37,7 @@ export class AuthGuard implements CanActivate {
     }
 
     request.user = data.user;
+
     return true;
   }
 }

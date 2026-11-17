@@ -46,10 +46,10 @@ export class BoardsService {
   async findOne(id: string) {
     const { data, error } = await this.supabase
       .from('boards')
-      .select('*,tasks(*)')
+      .select('*,tasks(*, profiles(*))')
       .eq('id', id)
       .single();
-
+    console.log(data?.tasks);
     if (error) {
       if (error.code === 'PGRST116') {
         throw new NotFoundException(`Board ${id} not found`);

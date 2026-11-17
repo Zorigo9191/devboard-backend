@@ -19,13 +19,12 @@ export class TasksService {
 
   //////// Task erzeugen //////////
   async create(task: CreateTaskDto) {
-    console.log(task);
     const { data, error } = await this.supabase
       .from('tasks')
       .insert(task)
-      .select('*')
+      .select('*, profiles(display_name)')
       .single();
-    console.log(data, error);
+
     if (error) {
       throw new InternalServerErrorException(error.message);
     }
